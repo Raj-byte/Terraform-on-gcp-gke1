@@ -63,3 +63,9 @@ Terraform plan :- where the blueprint of your infrastructure will be made
 
 Terraform apply :- where you finally deploy and provision your infrastructure on the provider you provide .
 
+Once Terraform is done, Check the status of the GKE Cluster & configure the kubectl command to connect using:
+
+gcloud container clusters list
+
+gcloud container clusters get-credentials primary --zone us-central1-a --project terraform-gcp-on
+
