@@ -14,6 +14,7 @@ resource "google_container_node_pool" "general" {
   node_config {
     preemptible  = false
     machine_type = var.machine_type
+    disk_size_gb   = var.disk_size_gb
 
     labels = {
       role = "general"
@@ -43,6 +44,7 @@ resource "google_container_node_pool" "spot" {
   node_config {
     preemptible  = true
     machine_type = var.machine_type
+    disk_size_gb   = var.disk_size_gb
 
     labels = {
       team = "B-stock-app"
