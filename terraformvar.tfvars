@@ -5,3 +5,4 @@ zones              = ["us-central1-a", "us-central1-b", "us-central1-c"]
 machine_type       = "e2-small"               # type of compute size
 min_count          = 1
 max_count          = 3
+disk_size_gb       = 10
