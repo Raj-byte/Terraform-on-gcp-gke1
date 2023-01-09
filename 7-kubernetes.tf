@@ -65,7 +65,7 @@ resource "null_resource" "configure_identity" {
     }    
     provisioner "local-exec" {
         command     = <<-EOT
-      cd /home/rajkumar/terraform-on-gcp/
+      cd ..#user path for script
       chmod +x istio.sh
       gcloud container clusters get-credentials primary --zone us-central1-a --project terraform-gcp-on  
       ./istio.sh
