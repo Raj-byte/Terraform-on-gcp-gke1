@@ -14,6 +14,7 @@ resource "google_container_cluster" "primary" {
     "us-central1-b"
   ]
 
+
   addons_config {
     http_load_balancing {
       disabled = true
@@ -21,6 +22,8 @@ resource "google_container_cluster" "primary" {
     horizontal_pod_autoscaling {
       disabled = false
     }
+
+    
   }
 
   release_channel {
@@ -28,7 +31,7 @@ resource "google_container_cluster" "primary" {
   }
 
   workload_identity_config {
-    workload_pool = "terraform-gcp-371405.svc.id.goog"
+    workload_pool = "terraform-gcp-on.svc.id.goog"
   }
 
   ip_allocation_policy {
@@ -39,6 +42,38 @@ resource "google_container_cluster" "primary" {
   private_cluster_config {
     enable_private_nodes    = true
     enable_private_endpoint = false
-    master_ipv4_cidr_block  = "172.16.0.0/28"
+    master_ipv4_cidr_block  = "172.16.0.0/28" 
+  } 
+  master_auth {
+    client_certificate_config {
+      issue_client_certificate = false
+    }
   }
+  master_authorized_networks_config {
+    cidr_blocks {
+      cidr_block   = "0.0.0.0/0"
+      display_name = "All"
+    }
+  }
+  
+  
 }
+
+resource "null_resource" "configure_identity" {    
+  triggers = {
+        id = google_container_cluster.primary.id
+    }    
+    provisioner "local-exec" {
+        command     = <<-EOT
+      cd /home/rajkumar/terraform-on-gcp/
+      chmod +x istio.sh
+      gcloud container clusters get-credentials primary --zone us-central1-a --project terraform-gcp-on  
+      ./istio.sh
+      kubectl get nodes
+    EOT
+       }    
+    
+    depends_on = [google_container_node_pool.general]
+}
+
+
